@@ -26,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-
 public class UpdateApp extends CordovaPlugin {
 
     /* 版本号检查路径 */
@@ -54,8 +53,8 @@ public class UpdateApp extends CordovaPlugin {
     /* 更新进度条 */
     //private ProgressBar mProgress;
     //private Dialog mDownloadDialog;
-    private final  int UPDATE_NOT_FOUND = 0;
-    private final  int UPDATE_EXCEPTION_OCCURED = 1;
+    private final int UPDATE_NOT_FOUND = 0;
+    private final int UPDATE_EXCEPTION_OCCURED = 1;
 
     protected static final String LOG_TAG = "UpdateApp";
 
@@ -93,7 +92,9 @@ public class UpdateApp extends CordovaPlugin {
             this.checkPath = args.getString(0);
             int currentVersionCode = this.getCurrentVerCode();
             Runnable runnable = new Runnable() {
+                @Override
                 public void run() {
+                    callbackContext.success();
                     if (getServerVerInfo()) {
                         int currentVerCode = getCurrentVerCode();
                         if (newVerCode > currentVerCode) {
@@ -104,11 +105,9 @@ public class UpdateApp extends CordovaPlugin {
                                 jsonObject.put("updateContent", updateContent);
                                 jsonObject.put("downloadPath", downloadPath);
                             } catch (JSONException e) {
-                                e.printStackTrace();
                                 callbackContext.error(UPDATE_EXCEPTION_OCCURED);
                             }
                             callbackContext.success(jsonObject);
-
                         } else {
                             callbackContext.error(UPDATE_NOT_FOUND);
                         }
@@ -118,11 +117,9 @@ public class UpdateApp extends CordovaPlugin {
                 }
             };
             cordova.getThreadPool().execute(runnable);
-
             return true;
         } else if ("downloadApk".equals(action)) {
             checkPath = args.getString(0);
-
             Runnable runnable = new Runnable() {
                 public void run() {
                     if (getServerVerInfo()) {
@@ -138,27 +135,11 @@ public class UpdateApp extends CordovaPlugin {
         return false;
     }
 
-    /**
-     * 检查更新
-     */
-//    private void checkAndUpdate() {
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                if (getServerVerInfo()) {
-//                    int currentVerCode = getCurrentVerCode();
-//                    if (newVerCode > currentVerCode) {
-//                        showNoticeDialog();
-//                    }
-//                }
-//            }
-//        };
-//        this.cordova.getThreadPool().execute(runnable);
-//    }
 
     /**
      * 获取应用当前版本代码versionCode
      *
-     * @param 
+     * @param
      * @return
      */
     private int getCurrentVerCode() {
@@ -176,7 +157,7 @@ public class UpdateApp extends CordovaPlugin {
     /**
      * 获取应用当前版本代码versionName
      *
-     * @param 
+     * @param
      * @return
      */
     private String getCurrentVerName() {
@@ -194,7 +175,7 @@ public class UpdateApp extends CordovaPlugin {
     /**
      * 获取服务器上的版本信息
      *
-     * @param 
+     * @param
      * @return
      * @throws Exception
      */
@@ -219,7 +200,7 @@ public class UpdateApp extends CordovaPlugin {
                 JSONObject obj = array.getJSONObject(0);
                 newVerCode = obj.getInt("verCode");
                 newVerName = obj.getString("verName");
-                downloadPath = obj.getString("apkPath");
+                downloadPath = obj.getString("downloadPath");
                 updateContent = obj.getString("updateContent");
             }
         } catch (Exception e) {
@@ -229,67 +210,6 @@ public class UpdateApp extends CordovaPlugin {
         return true;
     }
 
-    /**
-     * 显示软件更新对话框
-     */
-//    private void showNoticeDialog() {
-//        Runnable runnable = new Runnable() {
-//            public void run() {
-//                // 构造对话框
-//                AlertDialog.Builder builder = new Builder(mContext);
-//                builder.setTitle(R.string.soft_update_title);
-//                builder.setMessage(R.string.soft_update_info);
-//                // 更新
-//                builder.setPositiveButton(R.string.soft_update_updatebtn,
-//                        new OnClickListener() {
-//                            public void onClick(DialogInterface dialog,
-//                                                int which) {
-//                                dialog.dismiss();
-//                                // 显示下载对话框
-//                                showDownloadDialog();
-//                            }
-//                        });
-//                // 稍后更新
-//                builder.setNegativeButton(R.string.soft_update_later,
-//                        new OnClickListener() {
-//                            public void onClick(DialogInterface dialog,
-//                                                int which) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                Dialog noticeDialog = builder.create();
-//                noticeDialog.show();
-//            }
-//        };
-//        this.cordova.getActivity().runOnUiThread(runnable);
-//    }
-
-    /**
-     * 显示软件下载对话框
-     */
-//    private void showDownloadDialog() {
-//        // 构造软件下载对话框
-//        AlertDialog.Builder builder = new Builder(mContext);
-//        builder.setTitle(R.string.soft_updating);
-//        // 给下载对话框增加进度条
-//        final LayoutInflater inflater = LayoutInflater.from(mContext);
-//        View v = inflater.inflate(R.layout.softupdate_progress, null);
-//        mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
-//        builder.setView(v);
-//        // 取消更新
-//        builder.setNegativeButton(R.string.soft_update_cancel,
-//                new OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        // 设置取消状态
-//                        cancelUpdate = true;
-//                    }
-//                });
-//        mDownloadDialog = builder.create();
-//        mDownloadDialog.show();
-//        // 现在文件
-//        downloadApk();
-//    }
 
     /**
      * 下载apk文件
@@ -315,8 +235,6 @@ public class UpdateApp extends CordovaPlugin {
                     break;
             }
         }
-
-        ;
     };
 
     /**
@@ -384,8 +302,6 @@ public class UpdateApp extends CordovaPlugin {
             //mDownloadDialog.dismiss();
         }
     }
-
-    ;
 
     /**
      * 安装APK文件
