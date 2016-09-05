@@ -12,7 +12,7 @@ cordova-plugin-updateapp
 
 安装：
 ========
-1. `cordova plugin add https://github.com/south-pacific/cordova-plugin-updateapp.git`
+1. `cordova plugin add https://github.com/huatech2016/cordova-plugin-updateapp.git`
 2. `cordova build android` 或者 `cordova build ios`
 3. 在服务器上放置版本信息文件`androidVersion.json` 或者 `iosVersion.json`
 
