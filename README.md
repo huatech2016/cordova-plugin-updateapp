@@ -44,7 +44,7 @@ window.plugins.updateApp.getAppVersion(function (version) {
 
 androidVersion.json:
 =========
-`[{"verCode":"最新版apk的versionCode","verName":"最新版apk的versionName","apkPath":"apk的地址"}]`
+`[{"verCode":"最新版apk的versionCode","verName":"最新版apk的versionName","apkPath":"apk的地址","updateContent":"更新内容"}]`
 
 iosVersion.json:
 =========
