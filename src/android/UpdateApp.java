@@ -45,6 +45,8 @@ public class UpdateApp extends CordovaPlugin {
     private String newVerName;
     /* APK 下载路径 */
     private String downloadPath;
+    /* APK 更新内容 */
+    private String updateContent;
     /* 下载中 */
     private static final int DOWNLOAD = 1;
     /* 下载结束 */
@@ -90,6 +92,49 @@ public class UpdateApp extends CordovaPlugin {
         } else if ("getVersionName".equals(action)) {
             callbackContext.success(this.getCurrentVerName());
             return true;
+        } else if("hasNewVersion".equals(action))
+        {
+            this.checkPath = args.getString(0);
+            int currentVersionCode = this.getCurrentVerCode();
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    if (getServerVerInfo()) {
+                        int currentVerCode = getCurrentVerCode();
+                        if (newVerCode > currentVerCode) {
+                            callbackContext.success();
+                        }
+                        else
+                        {
+                            callbackContext.error("已经是最新版本");
+                        }
+                    }
+                    else
+                    {
+                        callbackContext.error("服务器获取版本信息出错");
+                    }
+                }
+            };
+            cordova.getThreadPool().execute(runnable);
+
+            return true;
+        } else if("downloadApk".equals(action))
+        {
+            this.checkPath = args.getString(0);
+            int currentVersionCode = this.getCurrentVerCode();
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    if (getServerVerInfo()) {
+                        int currentVerCode = getCurrentVerCode();
+                       downloadApk();
+                    }
+                    else
+                    {
+                        callbackContext.error("服务器获取版本信息出错");
+                    }
+                }
+            };
+            cordova.getThreadPool().execute(runnable);
+            return true;
         }
         return false;
     }
@@ -113,7 +158,7 @@ public class UpdateApp extends CordovaPlugin {
 
     /**
      * 获取应用当前版本代码versionCode
-     * 
+     *
      * @param context
      * @return
      */
@@ -131,7 +176,7 @@ public class UpdateApp extends CordovaPlugin {
 
     /**
      * 获取应用当前版本代码versionName
-     * 
+     *
      * @param context
      * @return
      */
@@ -149,7 +194,7 @@ public class UpdateApp extends CordovaPlugin {
 
     /**
      * 获取服务器上的版本信息
-     * 
+     *
      * @param path
      * @return
      * @throws Exception
@@ -176,6 +221,7 @@ public class UpdateApp extends CordovaPlugin {
                 newVerCode = obj.getInt("verCode");
                 newVerName = obj.getString("verName");
                 downloadPath = obj.getString("apkPath");
+                updateContent =  obj.getString("updateContent");
             }
         } catch (Exception e) {
             Log.d(LOG_TAG, "获取服务器上的版本信息异常：" + e.toString());
@@ -260,7 +306,7 @@ public class UpdateApp extends CordovaPlugin {
             // 正在下载
             case DOWNLOAD:
                 // 设置进度条位置
-                mProgress.setProgress(progress);
+                //mProgress.setProgress(progress);
                 break;
             case DOWNLOAD_FINISH:
                 // 安装文件
@@ -313,7 +359,8 @@ public class UpdateApp extends CordovaPlugin {
                         // 计算进度条位置
                         progress = (int) (((float) count / length) * 100);
                         // 更新进度
-                        mHandler.sendEmptyMessage(DOWNLOAD);
+                        // TODO: 2016/9/5 通知栏
+                        //mHandler.sendEmptyMessage(DOWNLOAD);
                         if (numread <= 0) {
                             // 下载完成
                             mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
@@ -333,7 +380,7 @@ public class UpdateApp extends CordovaPlugin {
                 Log.d(LOG_TAG, "下载文件线程异常IOException：" + e.toString());
             }
             // 取消下载对话框显示
-            mDownloadDialog.dismiss();
+            //mDownloadDialog.dismiss();
         }
     };
 
