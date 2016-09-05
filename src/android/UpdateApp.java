@@ -37,27 +37,27 @@ import com.qinsilk.app.R;
 
 public class UpdateApp extends CordovaPlugin {
 
-    /* °æ±¾ºÅ¼ì²éÂ·¾¶ */
+    /* ç‰ˆæœ¬å·æ£€æŸ¥è·¯å¾„ */
     private String checkPath;
-    /* ĞÂ°æ±¾ºÅ */
+    /* æ–°ç‰ˆæœ¬å· */
     private int newVerCode;
-    /* ĞÂ°æ±¾Ãû³Æ */
+    /* æ–°ç‰ˆæœ¬åç§° */
     private String newVerName;
-    /* APK ÏÂÔØÂ·¾¶ */
+    /* APK ä¸‹è½½è·¯å¾„ */
     private String downloadPath;
-    /* ÏÂÔØÖĞ */
+    /* ä¸‹è½½ä¸­ */
     private static final int DOWNLOAD = 1;
-    /* ÏÂÔØ½áÊø */
+    /* ä¸‹è½½ç»“æŸ */
     private static final int DOWNLOAD_FINISH = 2;
-    /* ÏÂÔØ±£´æÂ·¾¶ */
+    /* ä¸‹è½½ä¿å­˜è·¯å¾„ */
     private String mSavePath;
-    /* ¼ÇÂ¼½ø¶ÈÌõÊıÁ¿ */
+    /* è®°å½•è¿›åº¦æ¡æ•°é‡ */
     private int progress;
-    /* ÊÇ·ñÈ¡Ïû¸üĞÂ */
+    /* æ˜¯å¦å–æ¶ˆæ›´æ–° */
     private boolean cancelUpdate = false;
-    /* ÉÏÏÂÎÄ */
+    /* ä¸Šä¸‹æ–‡ */
     private Context mContext;
-    /* ¸üĞÂ½ø¶ÈÌõ */
+    /* æ›´æ–°è¿›åº¦æ¡ */
     private ProgressBar mProgress;
     private Dialog mDownloadDialog;
 
@@ -95,7 +95,7 @@ public class UpdateApp extends CordovaPlugin {
     }
 
     /**
-     * ¼ì²é¸üĞÂ
+     * æ£€æŸ¥æ›´æ–°
      */
     private void checkAndUpdate() {
         Runnable runnable = new Runnable() {
@@ -112,7 +112,7 @@ public class UpdateApp extends CordovaPlugin {
     }
 
     /**
-     * »ñÈ¡Ó¦ÓÃµ±Ç°°æ±¾´úÂëversionCode
+     * è·å–åº”ç”¨å½“å‰ç‰ˆæœ¬ä»£ç versionCode
      * 
      * @param context
      * @return
@@ -124,13 +124,13 @@ public class UpdateApp extends CordovaPlugin {
             currentVer = this.mContext.getPackageManager().getPackageInfo(
                     packageName, 0).versionCode;
         } catch (NameNotFoundException e) {
-            Log.d(LOG_TAG, "»ñÈ¡Ó¦ÓÃµ±Ç°°æ±¾´úÂëversionCodeÒì³££º" + e.toString());
+            Log.d(LOG_TAG, "è·å–åº”ç”¨å½“å‰ç‰ˆæœ¬ä»£ç versionCodeå¼‚å¸¸ï¼š" + e.toString());
         }
         return currentVer;
     }
 
     /**
-     * »ñÈ¡Ó¦ÓÃµ±Ç°°æ±¾´úÂëversionName
+     * è·å–åº”ç”¨å½“å‰ç‰ˆæœ¬ä»£ç versionName
      * 
      * @param context
      * @return
@@ -142,13 +142,13 @@ public class UpdateApp extends CordovaPlugin {
             currentVer = this.mContext.getPackageManager().getPackageInfo(
                     packageName, 0).versionName;
         } catch (NameNotFoundException e) {
-            Log.d(LOG_TAG, "»ñÈ¡Ó¦ÓÃµ±Ç°°æ±¾´úÂëversionNameÒì³££º" + e.toString());
+            Log.d(LOG_TAG, "è·å–åº”ç”¨å½“å‰ç‰ˆæœ¬ä»£ç versionNameå¼‚å¸¸ï¼š" + e.toString());
         }
         return currentVer;
     }
 
     /**
-     * »ñÈ¡·şÎñÆ÷ÉÏµÄ°æ±¾ĞÅÏ¢
+     * è·å–æœåŠ¡å™¨ä¸Šçš„ç‰ˆæœ¬ä¿¡æ¯
      * 
      * @param path
      * @return
@@ -178,33 +178,33 @@ public class UpdateApp extends CordovaPlugin {
                 downloadPath = obj.getString("apkPath");
             }
         } catch (Exception e) {
-            Log.d(LOG_TAG, "»ñÈ¡·şÎñÆ÷ÉÏµÄ°æ±¾ĞÅÏ¢Òì³££º" + e.toString());
+            Log.d(LOG_TAG, "è·å–æœåŠ¡å™¨ä¸Šçš„ç‰ˆæœ¬ä¿¡æ¯å¼‚å¸¸ï¼š" + e.toString());
             return false;
         }
         return true;
     }
 
     /**
-     * ÏÔÊ¾Èí¼ş¸üĞÂ¶Ô»°¿ò
+     * æ˜¾ç¤ºè½¯ä»¶æ›´æ–°å¯¹è¯æ¡†
      */
     private void showNoticeDialog() {
         Runnable runnable = new Runnable() {
             public void run() {
-                // ¹¹Ôì¶Ô»°¿ò
+                // æ„é€ å¯¹è¯æ¡†
                 AlertDialog.Builder builder = new Builder(mContext);
                 builder.setTitle(R.string.soft_update_title);
                 builder.setMessage(R.string.soft_update_info);
-                // ¸üĞÂ
+                // æ›´æ–°
                 builder.setPositiveButton(R.string.soft_update_updatebtn,
                         new OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                     int which) {
                                 dialog.dismiss();
-                                // ÏÔÊ¾ÏÂÔØ¶Ô»°¿ò
+                                // æ˜¾ç¤ºä¸‹è½½å¯¹è¯æ¡†
                                 showDownloadDialog();
                             }
                         });
-                // ÉÔºó¸üĞÂ
+                // ç¨åæ›´æ–°
                 builder.setNegativeButton(R.string.soft_update_later,
                         new OnClickListener() {
                             public void onClick(DialogInterface dialog,
@@ -220,50 +220,50 @@ public class UpdateApp extends CordovaPlugin {
     }
 
     /**
-     * ÏÔÊ¾Èí¼şÏÂÔØ¶Ô»°¿ò
+     * æ˜¾ç¤ºè½¯ä»¶ä¸‹è½½å¯¹è¯æ¡†
      */
     private void showDownloadDialog() {
-        // ¹¹ÔìÈí¼şÏÂÔØ¶Ô»°¿ò
+        // æ„é€ è½¯ä»¶ä¸‹è½½å¯¹è¯æ¡†
         AlertDialog.Builder builder = new Builder(mContext);
         builder.setTitle(R.string.soft_updating);
-        // ¸øÏÂÔØ¶Ô»°¿òÔö¼Ó½ø¶ÈÌõ
+        // ç»™ä¸‹è½½å¯¹è¯æ¡†å¢åŠ è¿›åº¦æ¡
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.softupdate_progress, null);
         mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
         builder.setView(v);
-        // È¡Ïû¸üĞÂ
+        // å–æ¶ˆæ›´æ–°
         builder.setNegativeButton(R.string.soft_update_cancel,
                 new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        // ÉèÖÃÈ¡Ïû×´Ì¬
+                        // è®¾ç½®å–æ¶ˆçŠ¶æ€
                         cancelUpdate = true;
                     }
                 });
         mDownloadDialog = builder.create();
         mDownloadDialog.show();
-        // ÏÖÔÚÎÄ¼ş
+        // ç°åœ¨æ–‡ä»¶
         downloadApk();
     }
 
     /**
-     * ÏÂÔØapkÎÄ¼ş
+     * ä¸‹è½½apkæ–‡ä»¶
      */
     private void downloadApk() {
-        // Æô¶¯ĞÂÏß³ÌÏÂÔØÈí¼ş
+        // å¯åŠ¨æ–°çº¿ç¨‹ä¸‹è½½è½¯ä»¶
         new downloadApkThread().start();
     }
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-            // ÕıÔÚÏÂÔØ
+            // æ­£åœ¨ä¸‹è½½
             case DOWNLOAD:
-                // ÉèÖÃ½ø¶ÈÌõÎ»ÖÃ
+                // è®¾ç½®è¿›åº¦æ¡ä½ç½®
                 mProgress.setProgress(progress);
                 break;
             case DOWNLOAD_FINISH:
-                // °²×°ÎÄ¼ş
+                // å®‰è£…æ–‡ä»¶
                 installApk();
                 break;
             default:
@@ -273,79 +273,79 @@ public class UpdateApp extends CordovaPlugin {
     };
 
     /**
-     * ÏÂÔØÎÄ¼şÏß³Ì
+     * ä¸‹è½½æ–‡ä»¶çº¿ç¨‹
      */
     private class downloadApkThread extends Thread {
         @Override
         public void run() {
             try {
-                // ÅĞ¶ÏSD¿¨ÊÇ·ñ´æÔÚ£¬²¢ÇÒÊÇ·ñ¾ßÓĞ¶ÁĞ´È¨ÏŞ
+                // åˆ¤æ–­SDå¡æ˜¯å¦å­˜åœ¨ï¼Œå¹¶ä¸”æ˜¯å¦å…·æœ‰è¯»å†™æƒé™
                 if (Environment.getExternalStorageState().equals(
                         Environment.MEDIA_MOUNTED)) {
-                    // »ñµÃ´æ´¢¿¨µÄÂ·¾¶
+                    // è·å¾—å­˜å‚¨å¡çš„è·¯å¾„
                     String sdpath = Environment.getExternalStorageDirectory()
                             + "/";
                     mSavePath = sdpath + "download";
                     URL url = new URL(downloadPath);
-                    // ´´½¨Á¬½Ó
+                    // åˆ›å»ºè¿æ¥
                     HttpURLConnection conn = (HttpURLConnection) url
                             .openConnection();
                     conn.connect();
-                    // »ñÈ¡ÎÄ¼ş´óĞ¡
+                    // è·å–æ–‡ä»¶å¤§å°
                     int length = conn.getContentLength();
-                    // ´´½¨ÊäÈëÁ÷
+                    // åˆ›å»ºè¾“å…¥æµ
                     InputStream is = conn.getInputStream();
 
                     File file = new File(mSavePath);
-                    // ÅĞ¶ÏÎÄ¼şÄ¿Â¼ÊÇ·ñ´æÔÚ
+                    // åˆ¤æ–­æ–‡ä»¶ç›®å½•æ˜¯å¦å­˜åœ¨
                     if (!file.exists()) {
                         file.mkdir();
                     }
                     File apkFile = new File(mSavePath, newVerName);
                     FileOutputStream fos = new FileOutputStream(apkFile);
                     int count = 0;
-                    // »º´æ
+                    // ç¼“å­˜
                     byte buf[] = new byte[1024];
-                    // Ğ´Èëµ½ÎÄ¼şÖĞ
+                    // å†™å…¥åˆ°æ–‡ä»¶ä¸­
                     do {
                         int numread = is.read(buf);
                         count += numread;
-                        // ¼ÆËã½ø¶ÈÌõÎ»ÖÃ
+                        // è®¡ç®—è¿›åº¦æ¡ä½ç½®
                         progress = (int) (((float) count / length) * 100);
-                        // ¸üĞÂ½ø¶È
+                        // æ›´æ–°è¿›åº¦
                         mHandler.sendEmptyMessage(DOWNLOAD);
                         if (numread <= 0) {
-                            // ÏÂÔØÍê³É
+                            // ä¸‹è½½å®Œæˆ
                             mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
                             break;
                         }
-                        // Ğ´ÈëÎÄ¼ş
+                        // å†™å…¥æ–‡ä»¶
                         fos.write(buf, 0, numread);
-                    } while (!cancelUpdate);// µã»÷È¡Ïû¾ÍÍ£Ö¹ÏÂÔØ.
+                    } while (!cancelUpdate);// ç‚¹å‡»å–æ¶ˆå°±åœæ­¢ä¸‹è½½.
                     fos.close();
                     is.close();
                 } else {
-                    Log.d(LOG_TAG, "ÊÖ»úÃ»ÓĞSD¿¨");
+                    Log.d(LOG_TAG, "æ‰‹æœºæ²¡æœ‰SDå¡");
                 }
             } catch (MalformedURLException e) {
-                Log.d(LOG_TAG, "ÏÂÔØÎÄ¼şÏß³ÌÒì³£MalformedURLException£º" + e.toString());
+                Log.d(LOG_TAG, "ä¸‹è½½æ–‡ä»¶çº¿ç¨‹å¼‚å¸¸MalformedURLExceptionï¼š" + e.toString());
             } catch (IOException e) {
-                Log.d(LOG_TAG, "ÏÂÔØÎÄ¼şÏß³ÌÒì³£IOException£º" + e.toString());
+                Log.d(LOG_TAG, "ä¸‹è½½æ–‡ä»¶çº¿ç¨‹å¼‚å¸¸IOExceptionï¼š" + e.toString());
             }
-            // È¡ÏûÏÂÔØ¶Ô»°¿òÏÔÊ¾
+            // å–æ¶ˆä¸‹è½½å¯¹è¯æ¡†æ˜¾ç¤º
             mDownloadDialog.dismiss();
         }
     };
 
     /**
-     * °²×°APKÎÄ¼ş
+     * å®‰è£…APKæ–‡ä»¶
      */
     private void installApk() {
         File apkfile = new File(mSavePath, newVerName);
         if (!apkfile.exists()) {
             return;
         }
-        // Í¨¹ıIntent°²×°APKÎÄ¼ş
+        // é€šè¿‡Intentå®‰è£…APKæ–‡ä»¶
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
@@ -354,3 +354,4 @@ public class UpdateApp extends CordovaPlugin {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
+ 
