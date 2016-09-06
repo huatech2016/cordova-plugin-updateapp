@@ -18,7 +18,7 @@ cordova-plugin-updateapp
 
 使用：
 ========
-```javascript
+~~```javascript~~
 ~~// 获取APP当前版本号~~
 window.plugins.updateApp.getCurrentVerInfo(function (currentVersionCode) {
     console.log(currentVersionCode);
