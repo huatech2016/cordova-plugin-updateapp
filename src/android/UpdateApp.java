@@ -58,6 +58,8 @@ public class UpdateApp extends CordovaPlugin {
 
     protected static final String LOG_TAG = "UpdateApp";
 
+    private CallbackContext downloadCallbackContext;
+
     @Override
     public boolean execute(String action, JSONArray args,
                            final CallbackContext callbackContext) throws JSONException {
@@ -94,7 +96,6 @@ public class UpdateApp extends CordovaPlugin {
             Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    callbackContext.success();
                     if (getServerVerInfo()) {
                         int currentVerCode = getCurrentVerCode();
                         if (newVerCode > currentVerCode) {
@@ -119,6 +120,7 @@ public class UpdateApp extends CordovaPlugin {
             cordova.getThreadPool().execute(runnable);
             return true;
         } else if ("downloadApk".equals(action)) {
+            downloadCallbackContext = callbackContext;
             checkPath = args.getString(0);
             Runnable runnable = new Runnable() {
                 public void run() {
@@ -229,6 +231,7 @@ public class UpdateApp extends CordovaPlugin {
                     break;
                 case DOWNLOAD_FINISH:
                     // 安装文件
+                    downloadCallbackContext.success("download finished");
                     installApk();
                     break;
                 default:
