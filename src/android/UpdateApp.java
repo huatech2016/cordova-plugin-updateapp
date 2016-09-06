@@ -297,8 +297,10 @@ public class UpdateApp extends CordovaPlugin {
                     Log.d(LOG_TAG, "手机没有SD卡");
                 }
             } catch (MalformedURLException e) {
+                downloadCallbackContext.error("下载文件线程异常MalformedURLException：" + e.toString());
                 Log.d(LOG_TAG, "下载文件线程异常MalformedURLException：" + e.toString());
             } catch (IOException e) {
+                downloadCallbackContext.error("下载文件线程异常IOException：" + e.toString());
                 Log.d(LOG_TAG, "下载文件线程异常IOException：" + e.toString());
             }
             // 取消下载对话框显示
