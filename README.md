@@ -19,27 +19,21 @@ cordova-plugin-updateapp
 使用：
 ========
 ~~```javascript
-// 获取APP当前版本号
-window.plugins.updateApp.getCurrentVerInfo(function (currentVersionCode) {
-    console.log(currentVersionCode);
-});
 
-// 获取服务器上APP的版本号，versionServer为版本信息文件地址
-window.plugins.updateApp.getServerVerInfo(function (serverVersionCode) {
-    console.log(serverVersionCode);
+
+// 检查是否有更新，checkPath为存放更新信息的json文件路径
+window.plugins.updateApp.hasNewVersion(function (updateContent) {
+    console.log(updateContent);
+}, function (error) {
+    console.log("出现异常"+error);
+}, checkPath);
+// 后台下载并安装，checkPath为存放更新信息的json文件路径
+window.plugins.updateApp.downloadApk(function () {
+    console.log(arguments);
 }, function () {
-    console.log("出现异常");
-}, versionServer);
+    console.log(arguments);
+}, checkPath);
 
-// 检查并更新，versionServer为版本信息文件地址
-window.plugins.updateApp.checkAndUpdate(versionServer);
-
-// 获取APP当前版本号
-// 与getCurrentVerInfo方法不同之处在于android下getCurrentVerInfo返回的是versionCode
-// 该方法返回的是versionName
-window.plugins.updateApp.getAppVersion(function (version) {
-    console.log(version);
-});~~
 ```
 
 androidVersion.json:
