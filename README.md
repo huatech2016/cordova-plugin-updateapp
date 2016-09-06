@@ -20,7 +20,20 @@ cordova-plugin-updateapp
 ========
 ~~```javascript
 
+// 检查是否有更新，checkPath为存放更新信息的json文件路径
+window.plugins.updateApp.hasNewVersion(function (updateContent) {
+    console.log(updateContent);
+}, function (error) {
+    console.log("出现异常"+error);
+}, checkPath);
 
+
+// 后台下载并安装，checkPath为存放更新信息的json文件路径
+window.plugins.updateApp.downloadApk(function () {
+    console.log(arguments);
+}, function () {
+    console.log(arguments);
+}, checkPath);
 
 
 ```
