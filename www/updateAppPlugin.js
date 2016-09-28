@@ -1,4 +1,4 @@
-cordova.define("com.qinsilk.updateapp.updateAppPlugin", function (require, exports, module) {
+
     /**
      * 检查并更新APP
      * @author robin
@@ -31,4 +31,4 @@ cordova.define("com.qinsilk.updateapp.updateAppPlugin", function (require, expor
         }
         window.plugins.updateApp = new UpdateApp();
     });
-});
+
