@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
+
 public class UpdateApp extends CordovaPlugin {
 
     /* 版本号检查路径 */
@@ -98,19 +99,21 @@ public class UpdateApp extends CordovaPlugin {
                 public void run() {
                     if (getServerVerInfo()) {
                         int currentVerCode = getCurrentVerCode();
-                        if (newVerCode > currentVerCode) {
+                        try {
                             JSONObject jsonObject = new JSONObject();
-                            try {
-                                jsonObject.put("currentVerCode", currentVerCode);
-                                jsonObject.put("newVerCode", newVerCode);
-                                jsonObject.put("updateContent", updateContent);
-                                jsonObject.put("downloadPath", downloadPath);
-                            } catch (JSONException e) {
-                                callbackContext.error(UPDATE_EXCEPTION_OCCURED);
+                            if (newVerCode > currentVerCode) {
+                                jsonObject.put("needUpdate", true);
+                            } else {
+                                jsonObject.put("needUpdate", false);
                             }
+                            jsonObject.put("currentVersion", currentVerCode);
+                            jsonObject.put("newVersion", newVerCode);
+                            jsonObject.put("updateContent", updateContent);
+                            jsonObject.put("downloadPath", downloadPath);
                             callbackContext.success(jsonObject);
-                        } else {
-                            callbackContext.error(UPDATE_NOT_FOUND);
+
+                        } catch (JSONException e) {
+                            callbackContext.success(UPDATE_EXCEPTION_OCCURED);
                         }
                     } else {
                         callbackContext.error(UPDATE_EXCEPTION_OCCURED);
@@ -119,7 +122,7 @@ public class UpdateApp extends CordovaPlugin {
             };
             cordova.getThreadPool().execute(runnable);
             return true;
-        } else if ("downloadApk".equals(action)) {
+        } else if ("downloadApp".equals(action)) {
             downloadCallbackContext = callbackContext;
             checkPath = args.getString(0);
             Runnable runnable = new Runnable() {
@@ -166,8 +169,7 @@ public class UpdateApp extends CordovaPlugin {
         String packageName = this.mContext.getPackageName();
         String currentVer = "";
         try {
-            currentVer = this.mContext.getPackageManager().getPackageInfo(
-                    packageName, 0).versionName;
+            currentVer = this.mContext.getPackageManager().getPackageInfo(packageName, 0).versionName;
         } catch (NameNotFoundException e) {
             Log.d(LOG_TAG, "获取应用当前版本代码versionName异常：" + e.toString());
         }
@@ -256,8 +258,7 @@ public class UpdateApp extends CordovaPlugin {
                     mSavePath = sdpath + "download";
                     URL url = new URL(downloadPath);
                     // 创建连接
-                    HttpURLConnection conn = (HttpURLConnection) url
-                            .openConnection();
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.connect();
                     // 获取文件大小
                     int length = conn.getContentLength();
