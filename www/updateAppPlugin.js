@@ -22,8 +22,11 @@
     UpdateApp.prototype.hasNewVersion = function (successCallback, failureCallback, checkPath) {
         cordova.exec(successCallback, failureCallback, "UpdateApp", "hasNewVersion", [checkPath]);
     }
-    UpdateApp.prototype.downloadApk = function (successCallback, failureCallback, checkPath) {
-        cordova.exec(successCallback, failureCallback, "UpdateApp", "downloadApk", [checkPath]);
+    UpdateApp.prototype.downloadApp = function (successCallback, failureCallback, checkPath) {
+        cordova.exec(successCallback, failureCallback, "UpdateApp", "downloadApp", [checkPath]);
+    }
+    UpdateApp.prototype.cancelUpdate = function (successCallback, failureCallback) {
+        cordova.exec(successCallback, failureCallback, "UpdateApp", "cancelUpdate");
     }
     cordova.addConstructor(function () {
         if (!window.plugins) {
