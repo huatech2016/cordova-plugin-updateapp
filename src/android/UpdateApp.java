@@ -11,6 +11,7 @@ import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 
 
 public class UpdateApp extends CordovaPlugin {
@@ -47,6 +47,7 @@ public class UpdateApp extends CordovaPlugin {
     private String mSavePath;
     /* 记录进度条数量 */
     private int progress;
+    private int oldProgress;
     /* 是否取消更新 */
     private boolean cancelUpdate = false;
     /* 上下文 */
@@ -136,6 +137,11 @@ public class UpdateApp extends CordovaPlugin {
             };
             cordova.getThreadPool().execute(runnable);
             return true;
+        }
+        else if(("cancelUpdate").equals(action))
+        {
+            cancelUpdate();
+            callbackContext.success("取消息下载成功");
         }
         return false;
     }
@@ -228,12 +234,16 @@ public class UpdateApp extends CordovaPlugin {
             switch (msg.what) {
                 // 正在下载
                 case DOWNLOAD:
-                    // 设置进度条位置
-                    //mProgress.setProgress(progress);
+                    PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,msg.arg1);
+                    pluginResult.setKeepCallback(true);
+                    downloadCallbackContext.sendPluginResult(pluginResult);
                     break;
                 case DOWNLOAD_FINISH:
                     // 安装文件
-                    downloadCallbackContext.success("download finished");
+                    //进度 大于 100 不再显示 下载窗口
+                    PluginResult pluginResult1 = new PluginResult(PluginResult.Status.OK,101);
+                    pluginResult1.setKeepCallback(false);
+                    downloadCallbackContext.sendPluginResult(pluginResult1);
                     installApk();
                     break;
                 default:
@@ -281,9 +291,14 @@ public class UpdateApp extends CordovaPlugin {
                         count += numread;
                         // 计算进度条位置
                         progress = (int) (((float) count / length) * 100);
-                        // 更新进度
-                        // TODO: 2016/9/5 通知栏
-                        //mHandler.sendEmptyMessage(DOWNLOAD);
+                        if(progress-oldProgress>1)
+                        {
+                            oldProgress = progress;
+                            Message msg = new Message();
+                            msg.arg1= progress;
+                            msg.what = DOWNLOAD;
+                            mHandler.sendMessage(msg);
+                        }
                         if (numread <= 0) {
                             // 下载完成
                             mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
@@ -320,10 +335,16 @@ public class UpdateApp extends CordovaPlugin {
         // 通过Intent安装APK文件
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
-                "application/vnd.android.package-archive");
+        i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
         mContext.startActivity(i);
         android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    private void cancelUpdate()
+    {
+        progress = 0;
+        oldProgress=0;
+        cancelUpdate = true;
     }
 }
  
