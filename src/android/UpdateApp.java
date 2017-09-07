@@ -269,6 +269,7 @@ public class UpdateApp extends CordovaPlugin {
                     URL url = new URL(downloadPath);
                     // 创建连接
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
                     conn.connect();
                     // 获取文件大小
                     int length = conn.getContentLength();
