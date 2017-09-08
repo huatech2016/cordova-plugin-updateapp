@@ -226,6 +226,9 @@ public class UpdateApp extends CordovaPlugin {
      */
     private void downloadApk() {
         // 启动新线程下载软件
+        cancelUpdate = false;
+        progress = 0;
+        oldProgress=0;
         new downloadApkThread().start();
     }
 
@@ -285,14 +288,14 @@ public class UpdateApp extends CordovaPlugin {
                     FileOutputStream fos = new FileOutputStream(apkFile);
                     int count = 0;
                     // 缓存
-                    byte buf[] = new byte[1024];
+                    byte buf[] = new byte[4096];
                     // 写入到文件中
                     do {
                         int numread = is.read(buf);
                         count += numread;
                         // 计算进度条位置
                         progress = (int) (((float) count / length) * 100);
-                        if(progress-oldProgress>1)
+                        if(progress-oldProgress>0)
                         {
                             oldProgress = progress;
                             Message msg = new Message();
@@ -343,8 +346,7 @@ public class UpdateApp extends CordovaPlugin {
 
     private void cancelUpdate()
     {
-        progress = 0;
-        oldProgress=0;
+
         cancelUpdate = true;
     }
 }
