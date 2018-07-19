@@ -39,6 +39,7 @@ public class UpdateApp extends CordovaPlugin {
     private String downloadPath;
     /* APK 更新内容 */
     private String updateContent;
+    private Boolean forceUpdate;
     /* 下载中 */
     private static final int DOWNLOAD = 1;
     /* 下载结束 */
@@ -110,6 +111,7 @@ public class UpdateApp extends CordovaPlugin {
                             jsonObject.put("currentVersion", currentVerCode);
                             jsonObject.put("newVersion", newVerCode);
                             jsonObject.put("updateContent", updateContent);
+                            jsonObject.put("forceUpdate", forceUpdate);
                             jsonObject.put("downloadPath", downloadPath);
                             callbackContext.success(jsonObject);
 
@@ -212,6 +214,7 @@ public class UpdateApp extends CordovaPlugin {
                 newVerName = obj.getString("verName");
                 downloadPath = obj.getString("downloadPath");
                 updateContent = obj.getString("updateContent");
+                forceUpdate = obj.getBoolean("forceUpdate");
             }
         } catch (Exception e) {
             Log.d(LOG_TAG, "获取服务器上的版本信息异常：" + e.toString());
