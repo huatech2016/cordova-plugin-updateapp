@@ -320,7 +320,8 @@ public class UpdateApp extends CordovaPlugin {
                     Log.d(LOG_TAG, "手机没有SD卡");
                 }
             } catch (MalformedURLException e) {
-                downloadCallbackContext.error("下载文件线程异常MalformedURLException：" + e.toString());
+                downloadCallbackContext.error("下载文件线程异常MalformedURLException：" + e.
+                                              ());
                 Log.d(LOG_TAG, "下载文件线程异常MalformedURLException：" + e.toString());
             } catch (IOException e) {
                 downloadCallbackContext.error("下载文件线程异常IOException：" + e.toString());
@@ -341,6 +342,7 @@ public class UpdateApp extends CordovaPlugin {
         }
         // 通过Intent安装APK文件
         Intent i = new Intent(Intent.ACTION_VIEW);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
         mContext.startActivity(i);
