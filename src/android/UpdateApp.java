@@ -31,8 +31,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import huatech.gov.wsq.BuildConfig;
-
 
 public class UpdateApp extends CordovaPlugin {
 
@@ -73,7 +71,7 @@ public class UpdateApp extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args,
 	                       final CallbackContext callbackContext) throws JSONException {
-		mSavePath = Environment.getExternalStorageDirectory() + File.separator+"download";
+		mSavePath = Environment.getExternalStorageDirectory() + File.separator + "download";
 
 		this.mContext = cordova.getActivity();
 
@@ -197,7 +195,8 @@ public class UpdateApp extends CordovaPlugin {
 				newVerName = obj.getString("verName") + ".apk";
 				downloadPath = obj.getString("downloadPath");
 				updateContent = obj.getString("updateContent");
-				forceUpdate = obj.getBoolean("forceUpdate");
+//				forceUpdate = obj.getBoolean("forceUpdate");
+				forceUpdate = false;
 			}
 		} catch (Exception e) {
 			Log.d(LOG_TAG, "获取服务器上的版本信息异常：" + e.toString());
@@ -328,9 +327,9 @@ public class UpdateApp extends CordovaPlugin {
 			return;
 		}
 		Uri apkUri;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+		if (Build.VERSION.SDK_INT >= 24) {
 
-			apkUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".fileProvider", file);
+			apkUri = FileProvider.getUriForFile(context, "PACKAGE-NAME-TO-REPLACE" + ".fileProvider", file);
 
 			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		} else {
@@ -347,7 +346,6 @@ public class UpdateApp extends CordovaPlugin {
 		}
 		context.startActivity(intent);
 	}
-
 
 
 	private void cancelUpdate() {
