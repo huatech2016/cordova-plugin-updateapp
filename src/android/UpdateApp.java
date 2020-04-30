@@ -71,7 +71,8 @@ public class UpdateApp extends CordovaPlugin {
 	@Override
 	public boolean execute(String action, JSONArray args,
 	                       final CallbackContext callbackContext) throws JSONException {
-		mSavePath = Environment.getExternalStorageDirectory() + File.separator + "download";
+		//mSavePath = Environment.getExternalStorageDirectory() + File.separator + "download";
+		mSavePath = cordova.getActivity().getExternalFilesDir("") + "";
 
 		this.mContext = cordova.getActivity();
 
